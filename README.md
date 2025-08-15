@@ -20,21 +20,21 @@ These components are all written in Java 11 (or higher), and correlate to the ex
 
 ## How to navigate the directory structure for this repository
 This repository is comprised of the following top level paths:
-- [config](https://github.com/programming-the-iot/java-components/tree/default/config): Contains basic configuration file(s).
-- [src](https://github.com/programming-the-iot/java-components/tree/default/src): Contains the following source trees:
-  - [src/main/java](https://github.com/programming-the-iot/java-components/tree/default/src/main/java): The main source tree for java-components. Keep in mind that most of these classes are shell representations ONLY and must be implemented as part of the exercises referenced above.
-  - [src/test/java](https://github.com/programming-the-iot/java-components/tree/default/src/test/java): The test source tree for java-components. These are designed to perform very basic unit and integration testing of the implementation of the exercises referenced above. This tree is sectioned by part - part01, part02, part03, and part04 - which correspond to the structure of Programming the Internet of Things.
+- [config](https://github.com/programming-the-iot/gda-java-components/tree/default/config): Contains basic configuration file(s).
+- [src](https://github.com/programming-the-iot/gda-java-components/tree/default/src): Contains the following source trees:
+  - [src/main/java](https://github.com/programming-the-iot/gda-java-components/tree/default/src/main/java): The main source tree for gda-java-components. Keep in mind that most of these classes are shell representations ONLY and must be implemented as part of the exercises referenced above.
+  - [src/test/java](https://github.com/programming-the-iot/gda-java-components/tree/default/src/test/java): The test source tree for gda-java-components. These are designed to perform very basic unit and integration testing of the implementation of the exercises referenced above. This tree is sectioned by part - part01, part02, part03, and part04 - which correspond to the structure of Programming the Internet of Things.
 
 Here are some other files at the top level that are important to review:
-- [pom.xml](https://github.com/programming-the-iot/java-components/blob/default/pom.xml): The Maven project configuration file, with relevant depedencies, etc.
-- [README.md](https://github.com/programming-the-iot/java-components/blob/default/README.md): This README.me file.
-- [LICENSE](https://github.com/programming-the-iot/java-components/blob/default/LICENSE): The repository's LICENSE file.
+- [pom.xml](https://github.com/programming-the-iot/gda-java-components/blob/default/pom.xml): The Maven project configuration file, with relevant depedencies, etc.
+- [README.md](https://github.com/programming-the-iot/gda-java-components/blob/default/README.md): This README.me file.
+- [LICENSE](https://github.com/programming-the-iot/gda-java-components/blob/default/LICENSE): The repository's LICENSE file.
 
 Lastly, here are some 'dot' ('.{filename}') files pertaining to dev environment setup that you may find useful (or not - if so, just delete them after cloning the repo):
-- [.classpath](https://github.com/programming-the-iot/java-components/blob/default/.classpath): The Eclipse IDE CLASSPATH configuration file for your Java environment that may / may not be useful for your own cloned instance.
-- [.gitignore](https://github.com/programming-the-iot/java-components/blob/default/.gitignore): The obligatory .gitignore that you should probably keep in place, with any additions that are relevant for your own cloned instance.
-- [.project](https://github.com/programming-the-iot/java-components/blob/default/.project): The Eclipse IDE project configuration file that may / may not be useful for your own cloned instance. Note that using this file to help create your Eclipse IDE project will result in the project name 'piot-java-components' (which can be changed, of course).
-- [.settings/org.eclipse.jdt.core.prefs](https://github.com/programming-the-iot/java-components/blob/default/.settings/org.eclipse.jdt.core.prefs): The Eclipse IDE settings file, which is only included to assist with setting up an Eclipse dev environment related to my IoT courses and book exercises, which may / may not be useful for your own cloned instance.
+- [.classpath](https://github.com/programming-the-iot/gda-java-components/blob/default/.classpath): The Eclipse IDE CLASSPATH configuration file for your Java environment that may / may not be useful for your own cloned instance.
+- [.gitignore](https://github.com/programming-the-iot/gda-java-components/blob/default/.gitignore): The obligatory .gitignore that you should probably keep in place, with any additions that are relevant for your own cloned instance.
+- [.project](https://github.com/programming-the-iot/gda-java-components/blob/default/.project): The Eclipse IDE project configuration file that may / may not be useful for your own cloned instance. Note that using this file to help create your Eclipse IDE project will result in the project name 'piot-gda-java-components' (which can be changed, of course).
+- [.settings/org.eclipse.jdt.core.prefs](https://github.com/programming-the-iot/gda-java-components/blob/default/.settings/org.eclipse.jdt.core.prefs): The Eclipse IDE settings file, which is only included to assist with setting up an Eclipse dev environment related to my IoT courses and book exercises, which may / may not be useful for your own cloned instance.
 
 NOTE: The directory structure and all files are subject to change based on feedback I receive from readers of my book and students in my IoT class, as well as improvements I find to be helpful for overall repo betterment.
 
@@ -91,6 +91,6 @@ This code base is under active development.
 If  any  code  samples  or  other  technology  this  work  contains, describes, and / or is  subject  to  open  source licenses  or  the  intellectual  property  rights  of  others,  it  is  your  responsibility  to  ensure  that  your  use thereof complies with such licenses and/or rights.
 
 # LICENSE
-Please see [LICENSE](https://github.com/programming-the-iot/java-components/blob/default/LICENSE) if you plan to use this code.
+Please see [LICENSE](https://github.com/programming-the-iot/gda-java-components/blob/default/LICENSE) if you plan to use this code.
 
 Please refer to the referenced libraries for their respective licenses.
