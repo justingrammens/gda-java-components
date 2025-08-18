@@ -3,7 +3,7 @@
  * project, and is available via the MIT License, which can be
  * found in the LICENSE file at the top level of this repository.
  * 
- * Copyright (c) 2020 by Andrew D. King
+ * Copyright (c) 2020 - 2025 by Andrew D. King
  */
 
 package programmingtheiot.common;
@@ -13,6 +13,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,18 +68,8 @@ public class ConfigUtil
 	{
 		super();
 		
-		try {
-			String cfgFileName = System.getProperty(ConfigConst.CONFIG_FILE_KEY);
-			
-			if (cfgFileName != null) {
-				this.configFileName = cfgFileName;
-			}
-		} catch (SecurityException e) {
-			_Logger.warning("Security exception reading system property to retrieve config file name. Using default.");
-		}
-		
-		initBackingProperties();
-		loadConfig();
+		// the initial load method calls and reload method make the same calls
+		this.reloadConfig();
 	}
 	
 	
@@ -298,8 +292,27 @@ public class ConfigUtil
 		
 		if (hasSection(section)) {
 			String credFileName = getProperty(section, ConfigConst.CRED_FILE_KEY);
+
+			if (credFileName == null) {
+				_Logger.warning("No cred file specified in config: " + credFileName);
+
+				for (String sContent : sectionProperties.getSections()) {
+				    _Logger.info("Config section: " + sContent);
+					
+					Iterator<String> iter = sectionProperties.getKeys(sContent);
+					//List<String> keys = Arrays.asList(iter);
+				    //for (String key : ) {
+					//	_Logger.info(" -> Prop: " + key + " = " + sectionProperties.getProperty(sContent + "." + key));
+					//}
+				}
+
+				return null;
+			}
+
 			File   credFile     = new File(credFileName);
 			
+			_Logger.info("\n\n==========\n\nAttempting to load cred file: " + credFile.getAbsolutePath() + "\n\n==========\n\n");
+
 			if (credFile.exists()) {
 				FileInputStream fis = null;
 				
@@ -328,6 +341,46 @@ public class ConfigUtil
 		return props;
 	}
 	
+	/**
+	 * Forces a reload of the configuration file. This call is useful
+	 * if the config file gets changed at runtime.
+	 * 
+	 */
+	public synchronized void reloadConfig()
+	{
+		boolean fileExists = false;
+		String cfgFileName = null;
+
+		try {
+			cfgFileName = System.getProperty(ConfigConst.CONFIG_FILE_KEY);
+			
+			if (cfgFileName != null) {
+				File cfgFile = new File (cfgFileName);
+
+				if (cfgFile.exists()) {
+					this.configFileName = cfgFileName;
+					fileExists = true;
+				} else {
+					_Logger.warning(
+						"Specified config file doesn't exist! Using default." +
+						"\n\tRequested Config File: " + cfgFileName +
+						"\n\tDefault Config File:   " + ConfigConst.DEFAULT_CONFIG_FILE_NAME);
+				}
+			}
+		} catch (SecurityException e) {
+			_Logger.warning(
+				"Security exception reading system property to retrieve config file name. Using default." +
+				"\n\tRequested Config File: " + cfgFileName +
+				"\n\tDefault Config File:   " + ConfigConst.DEFAULT_CONFIG_FILE_NAME);
+		} finally {
+			if (! fileExists) {
+				this.configFileName = ConfigConst.DEFAULT_CONFIG_FILE_NAME;
+			}
+		}
+		
+		this.initBackingProperties();
+		this.loadConfig();
+	}
 	
 	// private methods
 	

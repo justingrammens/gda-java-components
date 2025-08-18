@@ -7,7 +7,7 @@
  * functionality, constants and interfaces (if there are any)
  * provided within in order to meet the needs of your specific
  * Programming the Internet of Things project.
- */ 
+ */
 
 package programmingtheiot.gda.app;
 

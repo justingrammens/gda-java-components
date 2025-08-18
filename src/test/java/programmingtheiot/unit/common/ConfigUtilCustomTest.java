@@ -3,7 +3,7 @@
  * project, and is available via the MIT License, which can be
  * found in the LICENSE file at the top level of this repository.
  * 
- * Copyright (c) 2020 by Andrew D. King
+ * Copyright (c) 2020 - 2025 by Andrew D. King
  */ 
 
 package programmingtheiot.unit.common;
@@ -35,7 +35,7 @@ public class ConfigUtilCustomTest
 	private static final Logger _Logger =
 		Logger.getLogger(ConfigUtilCustomTest.class.getName());
 	
-	public static final String DIR_PREFIX = "./src/test/java/programmingtheiot/unit/common/";
+	public static final String DIR_PREFIX = System.getProperty("user.dir") + "/src/test/java/programmingtheiot/unit/common/";
 	public static final String TEST_VALID_CFG_FILE   = DIR_PREFIX + "ValidTestConfig.props";
 	public static final String TEST_EMPTY_CFG_FILE   = DIR_PREFIX + "EmptyTestConfig.props";
 	public static final String TEST_INVALID_CFG_FILE = DIR_PREFIX + "InvalidTestConfig.props";
@@ -51,8 +51,6 @@ public class ConfigUtilCustomTest
 	
 	// member var's
 	
-	private File validTestFile = new File(TEST_VALID_CFG_FILE);
-	
 	
 	// test setup methods
 	
@@ -64,7 +62,12 @@ public class ConfigUtilCustomTest
 	{
 		// ConfigUtil will check if the property is set, and if so,
 		// use it within this JRE instance
-		System.setProperty(ConfigConst.CONFIG_FILE_KEY, TEST_VALID_CFG_FILE);
+		File validTestFile = new File(TEST_VALID_CFG_FILE);
+		String validTestFileStr = validTestFile.getAbsolutePath();
+
+		System.setProperty(ConfigConst.CONFIG_FILE_KEY, validTestFileStr);
+
+		_Logger.info("Test file path: " + validTestFileStr);
 	}
 	
 	/**
@@ -73,9 +76,7 @@ public class ConfigUtilCustomTest
 	@Before
 	public void setUp() throws Exception
 	{
-		// make sure test files exist
-		assertTrue(validTestFile.exists());
-		assertNotNull(ConfigUtil.getInstance());
+		ConfigUtil.getInstance().reloadConfig();
 	}
 	
 	// test methods
@@ -85,7 +86,8 @@ public class ConfigUtilCustomTest
 	{
 		Properties props =
 			ConfigUtil.getInstance().getCredentials(ConfigConst.GATEWAY_DEVICE);
-		
+				
+		// make sure test files exist
 		assertNotNull(props);
 		assertEquals(props.getProperty(ConfigConst.USER_NAME_TOKEN_KEY), DEFAULT_USER);
 		assertEquals(props.getProperty(ConfigConst.USER_AUTH_TOKEN_KEY), DEFAULT_AUTH);

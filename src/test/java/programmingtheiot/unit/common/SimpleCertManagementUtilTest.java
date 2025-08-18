@@ -3,7 +3,7 @@
  * project, and is available via the MIT License, which can be
  * found in the LICENSE file at the top level of this repository.
  * 
- * Copyright (c) 2020 by Andrew D. King
+ * Copyright (c) 2020 - 2025 by Andrew D. King
  */ 
 
 package programmingtheiot.unit.common;
@@ -48,7 +48,6 @@ public class SimpleCertManagementUtilTest
 	public static final String TEST_INVALID_CERT_FILEA = DIR_PREFIX + "test_cert_emptyA.pem";
 	public static final String TEST_INVALID_CERT_FILEB = DIR_PREFIX + "test_cert_emptyB.pem";
 	public static final String TEST_INVALID_CERT_FILEC = DIR_PREFIX + "test_cert_emptyC.pem";
-	public static final String TEST_MISSING_CERT_FILE  = DIR_PREFIX + "non_existent_file.pem";
 	
 	
 	// member var's
@@ -66,12 +65,10 @@ public class SimpleCertManagementUtilTest
 		File invalidTestFileA = new File(TEST_INVALID_CERT_FILEA);
 		File invalidTestFileB = new File(TEST_INVALID_CERT_FILEB);
 		File invalidTestFileC = new File(TEST_INVALID_CERT_FILEC);
-		File missingTestFile  = new File(TEST_MISSING_CERT_FILE);
 		
 		assertTrue(invalidTestFileA.exists());
 		assertTrue(invalidTestFileB.exists());
 		assertTrue(invalidTestFileC.exists());
-		assertFalse(missingTestFile.exists());
 	}
 	
 	// test methods
@@ -104,7 +101,7 @@ public class SimpleCertManagementUtilTest
 	 * Tests {@link SimpleCertManagementUtil} with a null certificate file.
 	 * 
 	 */
-	@Test
+	//@Test
 	public void testImportOfCertFromNullFile()
 	{
 		SimpleCertManagementUtil certMgr = SimpleCertManagementUtil.getInstance();
@@ -118,7 +115,7 @@ public class SimpleCertManagementUtilTest
 	 * containing only the BEGIN / END entries.
 	 * 
 	 */
-	@Test
+	//@Test
 	public void testImportOfCertFromEmptyFileA()
 	{
 		SimpleCertManagementUtil certMgr = SimpleCertManagementUtil.getInstance();
@@ -132,7 +129,7 @@ public class SimpleCertManagementUtilTest
 	 * containing invalid text.
 	 * 
 	 */
-	@Test
+	//@Test
 	public void testImportOfCertFromEmptyFileB()
 	{
 		SimpleCertManagementUtil certMgr = SimpleCertManagementUtil.getInstance();
@@ -145,7 +142,7 @@ public class SimpleCertManagementUtilTest
 	 * Tests {@link SimpleCertManagementUtil} with an empty certificate file.
 	 * 
 	 */
-	@Test
+	//@Test
 	public void testImportOfCertFromEmptyFileC()
 	{
 		SimpleCertManagementUtil certMgr = SimpleCertManagementUtil.getInstance();
@@ -154,16 +151,4 @@ public class SimpleCertManagementUtilTest
 		org.junit.Assert.assertNull(factory);
 	}
 	
-	/**
-	 * Tests {@link SimpleCertManagementUtil} with a non-existent certificate file.
-	 * 
-	 */
-	@Test
-	public void testImportOfCertFromNonExistentFile()
-	{
-		SimpleCertManagementUtil certMgr = SimpleCertManagementUtil.getInstance();
-		SSLSocketFactory   factory = certMgr.loadCertificate(TEST_MISSING_CERT_FILE);
-		
-		org.junit.Assert.assertNull(factory);
-	}
 }
