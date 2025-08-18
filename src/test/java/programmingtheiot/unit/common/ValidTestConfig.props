@@ -46,4 +46,4 @@ enableCoapServer        = False
 enableCloudClient       = False
 enableSmtpClient        = False
 enablePersistenceClient = False
-credFile                = ./src/test/java/programmingtheiot/unit/common/DummyCredFile.props
+credFile                = src/test/java/programmingtheiot/unit/common/DummyCredFile.props
