@@ -21,13 +21,12 @@ import programmingtheiot.common.ConfigConst;
 public abstract class BaseSystemUtilTask
 {
 	// static
-	
-	private static final Logger _Logger =
+	protected final Logger _Logger =
 		Logger.getLogger(BaseSystemUtilTask.class.getName());
 	
 	
 	// private
-	
+	// GDA-02-004
 	private String name   = ConfigConst.NOT_SET;
 	private int    typeID = ConfigConst.DEFAULT_TYPE_ID;
 	
@@ -41,9 +40,10 @@ public abstract class BaseSystemUtilTask
 	
 	// public methods
 	
+	// GDA-02-004
 	public String getName()
 	{
-		return null;
+		return this.name;
 	}
 	
 	/**
@@ -51,9 +51,10 @@ public abstract class BaseSystemUtilTask
 	 * 
 	 * @return int
 	 */
+	// GDA-02-004
 	public int getTypeID()
 	{
-		return 0;
+		return this.typeID;
 	}
 	
 	/**
@@ -62,6 +63,7 @@ public abstract class BaseSystemUtilTask
 	 * 
 	 * @return float
 	 */
+	// GDA-02-004
 	public abstract float getTelemetryValue();
 	
 }
