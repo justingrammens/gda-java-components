@@ -78,7 +78,8 @@ public class SystemPerformanceManager
 		float memUtil = this.sysMemUtilTask.getTelemetryValue();
 		
 		// NOTE: you may need to change the logging level to 'info' to see the message
-		_Logger.fine("CPU utilization: " + cpuUtil + ", Mem utilization: " + memUtil);
+		//_Logger.fine("CPU utilization: " + cpuUtil + ", Mem utilization: " + memUtil);
+		_Logger.log(Level.INFO, "CPU utilization: {0}, Mem utilization: {1}", new Object[]{cpuUtil, memUtil});
 	}
 	
 	public void setDataMessageListener(IDataMessageListener listener)
