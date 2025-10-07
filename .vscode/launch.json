@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "GatewayDeviceApp",
+      "request": "launch",
+      "mainClass": "programmingtheiot.gda.app.GatewayDeviceApp",
+      "projectName": "gateway-device-app"
+    },
+    {
+      "type": "java",
       "request": "launch",
       "name": "Programming the IoT - GDA Implementation",
       "mainClass": "piot.gda.app.GatewayDeviceApp",
