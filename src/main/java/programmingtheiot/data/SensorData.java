@@ -21,20 +21,15 @@ import programmingtheiot.common.ConfigConst;
  */
 public class SensorData extends BaseIotData implements Serializable
 {
-	// static
-	
+	// NOTE: You should create your own unique serialVersionUID
+	private static final long serialVersionUID = 6283569230384638954L;
 	
 	// private var's
-	
+	private float value = ConfigConst.DEFAULT_VAL;
     
 	// constructors
 	
 	public SensorData()
-	{
-		super();
-	}
-	
-	public SensorData(int sensorType)
 	{
 		super();
 	}
@@ -44,37 +39,22 @@ public class SensorData extends BaseIotData implements Serializable
 	
 	public float getValue()
 	{
-		return 0.0f;
+		return this.value;
 	}
 	
 	public void setValue(float val)
 	{
+		super.updateTimeStamp();
+		this.value = val;
 	}
-	
-	/**
-	 * Returns a string representation of this instance. This will invoke the base class
-	 * {@link #toString()} method, then append the output from this call.
-	 * 
-	 * @return String The string representing this instance, returned in CSV 'key=value' format.
-	 */
-	public String toString()
-	{
-		StringBuilder sb = new StringBuilder(super.toString());
-		
-		sb.append(',');
-		sb.append(ConfigConst.VALUE_PROP).append('=').append(this.getValue());
-		
-		return sb.toString();
-	}
-	
 	
 	// protected methods
 	
-	/* (non-Javadoc)
-	 * @see programmingtheiot.data.BaseIotData#handleUpdateData(programmingtheiot.data.BaseIotData)
-	 */
 	protected void handleUpdateData(BaseIotData data)
 	{
+		if (data instanceof SensorData) {
+			SensorData sData = (SensorData) data;
+			this.setValue(sData.getValue());
+		}
 	}
-	
 }

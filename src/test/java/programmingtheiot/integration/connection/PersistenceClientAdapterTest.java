@@ -81,7 +81,7 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#connectClient()}.
 	 */
-	@Test
+	//@Test
 	public void testConnectClient()
 	{
 		fail("Not yet implemented"); // TODO
@@ -90,16 +90,16 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#disconnectClient()}.
 	 */
-	@Test
+	//@Test
 	public void testDisconnectClient()
-	{
+	{	
 		fail("Not yet implemented"); // TODO
 	}
 	
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#getActuatorData(java.lang.String, java.util.Date, java.util.Date)}.
 	 */
-	@Test
+	//@Test
 	public void testGetActuatorData()
 	{
 		fail("Not yet implemented"); // TODO
@@ -108,7 +108,7 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#getSensorData(java.lang.String, java.util.Date, java.util.Date)}.
 	 */
-	@Test
+	//@Test
 	public void testGetSensorData()
 	{
 		fail("Not yet implemented"); // TODO
@@ -117,7 +117,7 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#storeData(java.lang.String, int, programmingtheiot.data.ActuatorData[])}.
 	 */
-	@Test
+	//@Test
 	public void testStoreDataStringIntActuatorDataArray()
 	{
 		fail("Not yet implemented"); // TODO
@@ -126,7 +126,7 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#storeData(java.lang.String, int, programmingtheiot.data.SensorData[])}.
 	 */
-	@Test
+	//@Test
 	public void testStoreDataStringIntSensorDataArray()
 	{
 		fail("Not yet implemented"); // TODO
@@ -135,7 +135,7 @@ public class PersistenceClientAdapterTest
 	/**
 	 * Test method for {@link programmingtheiot.gda.connection.RedisPersistenceAdapter#storeData(java.lang.String, int, programmingtheiot.data.SystemPerformanceData[])}.
 	 */
-	@Test
+	//@Test
 	public void testStoreDataStringIntSystemPerformanceDataArray()
 	{
 		fail("Not yet implemented"); // TODO

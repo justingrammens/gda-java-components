@@ -76,7 +76,17 @@ enableCoapClient        = False
 enableCloudClient       = False
 enableSmtpClient        = False
 enablePersistenceClient = False
-enableSystemPerformance = False
+#enableSystemPerformance = False
+enableSystemPerformance = True
 testGdaDataPath         = /tmp/gda-data
 testCdaDataPath         = /tmp/cda-data
 testEmptyApp            = False
+
+#
+# Persistence client configuration information
+#
+[Data.GatewayService]
+credFile = ./cred/PiotPersistenceCred.props
+host = localhost
+port = 6379
+enableCrypt = False

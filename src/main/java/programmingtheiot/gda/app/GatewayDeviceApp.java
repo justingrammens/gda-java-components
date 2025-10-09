@@ -39,6 +39,10 @@ public class GatewayDeviceApp
 	// private var's
 	
 	private String configFile = ConfigConst.DEFAULT_CONFIG_FILE_NAME;
+	
+	// private var's
+	
+	private DeviceDataManager dataMgr = null;
 
 	// constructors
 	
@@ -77,21 +81,17 @@ public class GatewayDeviceApp
 	 */
 	public static void main(String[] args)
 	{
-		Map<String, String> argMap = parseArgs(args);
-
-		if (argMap.containsKey(ConfigConst.CONFIG_FILE_KEY)) {
-			System.setProperty(ConfigConst.CONFIG_FILE_KEY, argMap.get(ConfigConst.CONFIG_FILE_KEY));
-		}
-
-		GatewayDeviceApp gwApp = new GatewayDeviceApp();
+		GatewayDeviceApp gwApp = new GatewayDeviceApp(args);
 		
 		gwApp.startApp();
 		
+		// TODO: custom add to ConfigConst for convenience
 		boolean runForever =
 			ConfigUtil.getInstance().getBoolean(ConfigConst.GATEWAY_DEVICE, ConfigConst.ENABLE_RUN_FOREVER_KEY);
 		
 		if (runForever) {
 			try {
+				// TODO: make the 2000L configurable
 				while (true) {
 					Thread.sleep(2000L);
 				}
@@ -163,13 +163,15 @@ public class GatewayDeviceApp
 		_Logger.info("Starting GDA...");
 		
 		try {
-			if (this.sysPerfMgr.startManager()) {
-				_Logger.info("GDA started successfully.");
-			} else {
-				_Logger.warning("Failed to start system performance manager!");
-				
-				stopApp(-1);
+			if (! ConfigUtil.getInstance().getBoolean(ConfigConst.GATEWAY_DEVICE, ConfigConst.TEST_EMPTY_APP_KEY)) {
+				this.dataMgr = new DeviceDataManager();
 			}
+			
+			if (this.dataMgr != null) {
+				this.dataMgr.startManager();
+			}
+			
+			_Logger.info("GDA started successfully.");
 		} catch (Exception e) {
 			_Logger.log(Level.SEVERE, "Failed to start GDA. Exiting.", e);
 			
@@ -187,11 +189,11 @@ public class GatewayDeviceApp
 		_Logger.info("Stopping GDA...");
 		
 		try {
-			if (this.sysPerfMgr.stopManager()) {
-				_Logger.log(Level.INFO, "GDA stopped successfully with exit code {0}.", code);
-			} else {
-				_Logger.warning("Failed to stop system performance manager!");
+			if (this.dataMgr != null) {
+				this.dataMgr.stopManager();
 			}
+			
+			_Logger.log(Level.INFO, "GDA stopped successfully with exit code {0}.", code);
 		} catch (Exception e) {
 			_Logger.log(Level.SEVERE, "Failed to cleanly stop GDA. Exiting.", e);
 		}
