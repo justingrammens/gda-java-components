@@ -92,6 +92,7 @@ public class GatewayDeviceAppTest
 		
 		try {
 			Thread.sleep(65000L);
+			//Thread.sleep(5000L);
 		} catch (InterruptedException e) {
 			// ignore
 		}

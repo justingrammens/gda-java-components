@@ -21,17 +21,22 @@ import programmingtheiot.common.ConfigConst;
  */
 public class SystemPerformanceData extends BaseIotData implements Serializable
 {
-	// static
-	
+
+	// NOTE: You should create your own unique serialVersionUID
+	private static final long serialVersionUID = 2470513167852495147L;
 	
 	// private var's
-	
-    
-	// constructors
+		
+	private float  cpuUtil  = ConfigConst.DEFAULT_VAL;
+	private float  diskUtil = ConfigConst.DEFAULT_VAL;
+	private float  memUtil  = ConfigConst.DEFAULT_VAL;
+	    
 	
 	public SystemPerformanceData()
 	{
 		super();
+		
+		super.setName(ConfigConst.SYS_PERF_DATA);
 	}
 	
 	
@@ -39,29 +44,38 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	
 	public float getCpuUtilization()
 	{
-		return 0.0f;
+		//return 0.0f;
+		return this.cpuUtil;
 	}
 	
 	public float getDiskUtilization()
 	{
-		return 0.0f;
+		//return 0.0f;
+		return this.diskUtil;
 	}
 	
 	public float getMemoryUtilization()
 	{
-		return 0.0f;
+		//return 0.0f;
+		return this.memUtil;
 	}
 	
 	public void setCpuUtilization(float val)
 	{
+		this.cpuUtil = val;
+		super.updateTimeStamp();
 	}
 	
 	public void setDiskUtilization(float val)
 	{
+		this.diskUtil = val;
+		super.updateTimeStamp();
 	}
 	
 	public void setMemoryUtilization(float val)
 	{
+		this.memUtil = val;
+		super.updateTimeStamp();
 	}
 	
 	/**
@@ -90,6 +104,12 @@ public class SystemPerformanceData extends BaseIotData implements Serializable
 	 */
 	protected void handleUpdateData(BaseIotData data)
 	{
+		if (data instanceof SystemPerformanceData) {
+			SystemPerformanceData sData = (SystemPerformanceData) data;
+			this.setCpuUtilization(sData.getCpuUtilization());
+			this.setDiskUtilization(sData.getDiskUtilization());
+			this.setMemoryUtilization(sData.getMemoryUtilization());
+		}
 	}
 	
 }

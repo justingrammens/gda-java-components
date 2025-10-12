@@ -56,44 +56,100 @@ public class DataUtil
 	
 	// public methods
 	
-	public String actuatorDataToJson(ActuatorData actuatorData)
+	public String actuatorDataToJson(ActuatorData data)
 	{
-		return null;
+		String jsonData = null;
+		
+		if (data != null) {
+			Gson gson = new Gson();
+			jsonData = gson.toJson(data);
+		}
+		
+		return jsonData;
 	}
 	
 	public String sensorDataToJson(SensorData sensorData)
 	{
-		return null;
+		String jsonData = null;
+
+		if (sensorData != null) {
+			Gson gson = new Gson();
+			jsonData = gson.toJson(sensorData);
+		}
+
+		return jsonData;
 	}
-	
+
 	public String systemPerformanceDataToJson(SystemPerformanceData sysPerfData)
 	{
-		return null;
+		String jsonData = null;
+
+		if (sysPerfData != null) {
+			Gson gson = new Gson();
+			jsonData = gson.toJson(sysPerfData);
+		}
+
+		return jsonData;
 	}
 	
 	public String systemStateDataToJson(SystemStateData sysStateData)
 	{
-		return null;
+		String jsonData = null;
+
+		if (sysStateData != null) {
+			Gson gson = new Gson();
+			jsonData = gson.toJson(sysStateData);
+		}
+
+		return jsonData;
 	}
 	
 	public ActuatorData jsonToActuatorData(String jsonData)
 	{
-		return null;
+		ActuatorData data = null;
+		
+		if (jsonData != null && jsonData.trim().length() > 0) {
+			Gson gson = new Gson();
+			data = gson.fromJson(jsonData, ActuatorData.class);
+		}
+		
+		return data;
 	}
 	
 	public SensorData jsonToSensorData(String jsonData)
 	{
-		return null;
+		SensorData data = null;
+
+		if (jsonData != null && jsonData.trim().length() > 0) {
+			Gson gson = new Gson();
+			data = gson.fromJson(jsonData, SensorData.class);
+		}
+
+		return data;
 	}
 	
 	public SystemPerformanceData jsonToSystemPerformanceData(String jsonData)
 	{
-		return null;
+		SystemPerformanceData data = null;
+
+		if (jsonData != null && jsonData.trim().length() > 0) {
+			Gson gson = new Gson();
+			data = gson.fromJson(jsonData, SystemPerformanceData.class);
+		}
+
+		return data;
 	}
-	
+
 	public SystemStateData jsonToSystemStateData(String jsonData)
 	{
-		return null;
+		SystemStateData data = null;
+
+		if (jsonData != null && jsonData.trim().length() > 0) {
+			Gson gson = new Gson();
+			data = gson.fromJson(jsonData, SystemStateData.class);
+		}
+
+		return data;
 	}
 	
 }
