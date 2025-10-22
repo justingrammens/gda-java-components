@@ -65,6 +65,7 @@ public class DeviceDataManager implements IDataMessageListener
 	
 	private RedisPersistenceAdapter redisClient;
 	
+	
 
 	// constructors
 	
@@ -115,6 +116,11 @@ public class DeviceDataManager implements IDataMessageListener
 	
 	public void setActuatorDataListener(String name, IActuatorDataListener listener)
 	{
+		if (listener != null) {
+			// for now, just ignore 'name' - if you need more than one listener,
+			// you can use 'name' to create a map of listener instances
+			this.actuatorDataListener = listener;
+		}
 	}
 	
 	
@@ -220,6 +226,14 @@ public class DeviceDataManager implements IDataMessageListener
 			this.redisClient.connectClient();
 		}
 		
+		if (this.enableCoapServer && this.coapServer != null) {
+			if (this.coapServer.startServer()) {
+				_Logger.info("CoAP server started.");
+			} else {
+				_Logger.severe("Failed to start CoAP server. Check log file for details.");
+			}
+		}
+		
 	}
 	
 	public void stopManager()
@@ -253,6 +267,14 @@ public class DeviceDataManager implements IDataMessageListener
 				_Logger.severe("Failed to disconnect MQTT client from broker.");
 				
 				// TODO: take appropriate action
+			}
+		}
+		
+		if (this.enableCoapServer && this.coapServer != null) {
+			if (this.coapServer.stopServer()) {
+				_Logger.info("CoAP server stopped.");
+			} else {
+				_Logger.severe("Failed to stop CoAP server. Check log file for details.");
 			}
 		}
 	}
@@ -307,11 +329,24 @@ public class DeviceDataManager implements IDataMessageListener
 		if (this.enablePersistenceClient) {
 			// TODO: implement this as an optional exercise in Lab Module 5
 		}
+		
+		if (this.enableCoapServer) {
+			this.coapServer = new CoapServerGateway(this);
+		}
 	}
 	
-	private boolean handleIncomingDataAnalysis(ResourceNameEnum resourceName, ActuatorData data)
+	private void handleIncomingDataAnalysis(ResourceNameEnum resource, ActuatorData data)
 	{
-		return true;
+		_Logger.info("Analyzing incoming actuator data: " + data.getName());
+		
+		if (data.isResponseFlagEnabled()) {
+			// TODO: implement this
+		} else {
+			if (this.actuatorDataListener != null) {
+				this.actuatorDataListener.onActuatorDataUpdate(data);
+			}
+		}
 	}
+
 	
 }
