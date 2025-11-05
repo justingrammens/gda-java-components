@@ -272,10 +272,19 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	}
 	
 	// callbacks
-	
+	@Override
 	public void connectComplete(boolean reconnect, String serverURI)
 	{
 		_Logger.info("MQTT connection successful (is reconnect = " + reconnect + "). Broker: " + serverURI);
+		
+		int qos = 1;
+		
+		this.subscribeToTopic(ResourceNameEnum.CDA_ACTUATOR_RESPONSE_RESOURCE, qos);
+		this.subscribeToTopic(ResourceNameEnum.CDA_SENSOR_MSG_RESOURCE, qos);
+		this.subscribeToTopic(ResourceNameEnum.CDA_SYSTEM_PERF_MSG_RESOURCE, qos);
+		
+		// IMPORTANT NOTE: You'll have to parse each message type in the callback method
+		// `public void messageArrived(String topic, MqttMessage msg) throws Exception`
 	}
 
 	public void connectionLost(Throwable t)
@@ -332,4 +341,6 @@ public class MqttClientConnector implements IPubSubClient, MqttCallbackExtended
 	{
 		// TODO: implement this
 	}
+	
+	
 }
