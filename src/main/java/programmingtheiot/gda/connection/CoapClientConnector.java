@@ -26,6 +26,7 @@ import programmingtheiot.common.ConfigConst;
 import programmingtheiot.common.ConfigUtil;
 import programmingtheiot.common.IDataMessageListener;
 import programmingtheiot.common.ResourceNameEnum;
+import programmingtheiot.gda.connection.handlers.GenericCoapResponseHandler;
 
 /**
  * Shell representation of class for student implementation.
@@ -120,7 +121,9 @@ public class CoapClientConnector implements IRequestResponseClient
 		        _Logger.info(" --> URI: " + wl.getURI() + ". Attributes: " + wl.getAttributes());
 		    }
 		}
+		
 		return true;
+		
 	}
 
 	@Override

@@ -99,7 +99,7 @@ public class CoapClientToServerConnectorTest
 	/**
 	 * 
 	 */
-	//@Test
+	@Test
 	public void testConnectAndDiscover()
 	{
 		assertTrue(this.coapClient.sendDiscoveryRequest(DEFAULT_TIMEOUT));
