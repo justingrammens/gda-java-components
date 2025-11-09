@@ -51,6 +51,7 @@ public class MqttClientConnectorTest
 	private MqttClientConnector mqttClient = null;
 	
 	
+	
 	// test setup methods
 	
 	/**
