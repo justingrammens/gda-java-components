@@ -11,6 +11,7 @@
 # Cloud client configuration information
 #
 [Cloud.GatewayService]
+cloudServiceName = Ubidots
 credFile       = ./cred/PiotCloudCred.props
 certFile       = ./cert/PiotCloudCert.pem
 host           = localhost
@@ -23,6 +24,24 @@ enableAuth     = True
 enableCrypt    = True
 baseUrl        = 
 baseTopic      = 
+
+[Cloud.GatewayService.Ubidots]
+cloudServiceName = Ubidots
+credFile       = /home/user/connecteddevices/cred/UbidotsCloudCred.props
+certFile       = /home/user/connecteddevices/cert/UbidotsCloudCert.pem
+host           = industrial.api.ubidots.com
+port           = 1883
+securePort     = 8883
+defaultQoS     = 0
+keepAlive      = 30
+#enableCrypt    = True
+enableCrypt    = False
+baseUrl        = https://things.ubidots.com/api/v1.6/
+baseTopic      = /v1.6/devices/
+deviceLabel      = gda-1
+sensorVar        = sensor
+systemVar        = system
+useTimeAndValuePayload = True   # <–– enables Ubidots time/value format
 
 #
 # SMTP client configuration information
@@ -70,8 +89,8 @@ enableConfirmedMsgs = True
 deviceLocationID        = gatewaydevice001
 enableLogging           = True
 pollCycleSecs           = 60
-enableMqttClient        = False
-enableCoapServer        = True
+enableMqttClient        = True
+enableCoapServer        = False
 enableCoapClient        = False
 enableCloudClient       = False
 enableSmtpClient        = False
@@ -81,6 +100,18 @@ enableSystemPerformance = True
 testGdaDataPath         = /tmp/gda-data
 testCdaDataPath         = /tmp/cda-data
 testEmptyApp            = False
+
+# if true, GDA will process humidity change events from CDA
+handleHumidityChangeOnDevice = True
+# min seconds between readings before triggering actuation event
+humidityMaxTimePastThreshold = 300
+# ideal average humidity level (% relative)
+nominalHumiditySetting       = 40.0
+# min value before turning on humidifier (% relative)
+triggerHumidifierFloor       = 30.0
+# max value before turning off humidifier (% relative)
+triggerHumidifierCeiling     = 50.0
+
 
 #
 # Persistence client configuration information
@@ -92,17 +123,3 @@ port = 6379
 enableCrypt = False
 
 
-# if true, GDA will process humidity change events from CDA
-handleHumidityChangeOnDevice = True
-
-# min seconds between readings before triggering actuation event
-humidityMaxTimePastThreshold = 300
-
-# ideal average humidity level (% relative)
-nominalHumiditySetting       = 40.0
-
-# min value before turning on humidifier (% relative)
-triggerHumidifierFloor       = 30.0
-
-# max value before turning off humidifier (% relative)
-triggerHumidifierCeiling     = 50.0

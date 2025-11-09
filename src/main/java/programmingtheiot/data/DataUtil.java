@@ -152,4 +152,110 @@ public class DataUtil
 		return data;
 	}
 	
+	/**
+	 * Converts an ActuatorData instance into Ubidots "time and value" JSON format:
+	 * {
+	 *   "ActuatorName": { "value": 1.0, "timestamp": 1700000000000 }
+	 * }
+	 *
+	 * @param data The ActuatorData instance.
+	 * @return A JSON string with name, value, and timestamp.
+	 */
+	public String actuatorDataToTimeAndValueJson(ActuatorData data)
+	{
+	    if (data == null) {
+	        return "{}";
+	    }
+
+	    try {
+	        org.json.JSONObject root = new org.json.JSONObject();
+	        org.json.JSONObject payload = new org.json.JSONObject();
+
+	        payload.put("value", data.getValue());
+	        payload.put("timestamp", data.getTimeStamp());
+
+	        // Use actuator name (e.g., "LedActuator") as the key
+	        String varName = (data.getName() != null && !data.getName().isEmpty())
+	                ? data.getName()
+	                : "actuator";
+
+	        root.put(varName, payload);
+	        return root.toString();
+	    } catch (Exception e) {
+	        // In case of JSON errors, fall back to minimal structure
+	        return "{}";
+	    }
+	}
+	
+	// ===== Add to DataUtil.java =====
+
+	/**
+	 * Ubidots-style "time and value" JSON for a single SensorData variable.
+	 * {
+	 *   "temperature": { "value": 23.7, "timestamp": 1700000000000 }
+	 * }
+	 */
+	public String sensorDataToTimeAndValueJson(SensorData data)
+	{
+		if (data == null) return "{}";
+
+		try {
+			org.json.JSONObject root = new org.json.JSONObject();
+			org.json.JSONObject payload = new org.json.JSONObject();
+
+			payload.put("value", data.getValue());
+			payload.put("timestamp", data.getTimeStamp());
+
+			String varName = (data.getName() != null && !data.getName().isEmpty())
+					? data.getName()
+					: "sensor";
+
+			root.put(varName, payload);
+			return root.toString();
+		} catch (Exception e) {
+			return "{}";
+		}
+	}
+
+	/**
+	 * Ubidots-style payload for SystemPerformanceData as multiple variables
+	 * (cpu, mem, and optionally disk). Produces:
+	 * {
+	 *   "cpu": {"value": 0.42, "timestamp": ...},
+	 *   "mem": {"value": 0.33, "timestamp": ...},
+	 *   "disk": {"value": 0.51, "timestamp": ...}
+	 * }
+	 */
+	public String systemPerformanceDataToTimeAndValueJson(SystemPerformanceData data)
+	{
+		if (data == null) return "{}";
+
+		try {
+			org.json.JSONObject root = new org.json.JSONObject();
+			long ts = data.getTimeStampMillis();
+
+			org.json.JSONObject cpu = new org.json.JSONObject();
+			cpu.put("value", data.getCpuUtilization());
+			cpu.put("timestamp", ts);
+			root.put("cpu", cpu);
+
+			org.json.JSONObject mem = new org.json.JSONObject();
+			mem.put("value", data.getMemoryUtilization());
+			mem.put("timestamp", ts);
+			root.put("mem", mem);
+
+			// Optional: include disk if your pipeline expects it
+			org.json.JSONObject disk = new org.json.JSONObject();
+			disk.put("value", data.getDiskUtilization());
+			disk.put("timestamp", ts);
+			root.put("disk", disk);
+
+			return root.toString();
+		} catch (Exception e) {
+			return "{}";
+		}
+	}
+
+
+	
 }
