@@ -1,5 +1,7 @@
 package programmingtheiot.gda.connection;
 
+import java.util.Properties;
+
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import programmingtheiot.common.ConfigConst;
 import programmingtheiot.common.ConfigUtil;
@@ -28,18 +30,18 @@ public class UbidotsCloudClient extends BaseCloudClient
     @Override
     protected void configureAuthTls(MqttConnectOptions opts) throws Exception
     {
-        // Ubidots MQTT typically uses token as "username" and empty password (or vice-versa).
-        // Store it in cred file and load via ConfigUtil.getCredential(...).
-        /*String token = ConfigUtil.getInstance().getCredential(sectionName, "token", null);
-        if (token != null && !token.isEmpty()) {
-            opts.setUserName(token);
-            opts.setPassword(new char[0]);
-        }*/
-    	// hardcode for now:
-    	
-    	 opts.setUserName("BBUS-tEah5Lv9cCQel7UL4MZGlDLCDUKABz");
-         opts.setPassword(new char[0]);
-         
+        // Ubidots MQTT typically uses token as "username" and empty password.
+        // Load credentials from the credential file configured for this section.
+        Properties credProps = ConfigUtil.getInstance().getCredentials(sectionName);
+
+        if (credProps != null) {
+            String token = credProps.getProperty(ConfigConst.USER_AUTH_TOKEN_KEY);
+            if (token != null && !token.isEmpty()) {
+                opts.setUserName(token);
+                opts.setPassword(new char[0]);
+            }
+        }
+
         // TLS: often handled by the broker with default CA; if you have custom certs, wire SSLSocketFactory here.
     }
 

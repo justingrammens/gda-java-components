@@ -27,7 +27,7 @@ baseTopic      =
 
 [Cloud.GatewayService.Ubidots]
 cloudServiceName = Ubidots
-credFile       = /home/user/connecteddevices/cred/UbidotsCloudCred.props
+credFile       = /Users/justingrammens/dev/justingrammens/programming-the-iot/gda-java-components/config/UbidotsCloudCred.props
 certFile       = /home/user/connecteddevices/cert/UbidotsCloudCert.pem
 host           = industrial.api.ubidots.com
 port           = 1883
