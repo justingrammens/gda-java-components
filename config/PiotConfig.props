@@ -34,6 +34,7 @@ port           = 1883
 securePort     = 8883
 defaultQoS     = 0
 keepAlive      = 30
+enableAuth     = True
 #enableCrypt    = True
 enableCrypt    = False
 baseUrl        = https://things.ubidots.com/api/v1.6/
@@ -41,7 +42,7 @@ baseTopic      = /v1.6/devices/
 deviceLabel      = gda-1
 sensorVar        = sensor
 systemVar        = system
-useTimeAndValuePayload = True   # <–– enables Ubidots time/value format
+useTimeAndValuePayload = False   # <–– enables Ubidots time/value format
 
 #
 # SMTP client configuration information
@@ -92,7 +93,7 @@ pollCycleSecs           = 60
 enableMqttClient        = True
 enableCoapServer        = False
 enableCoapClient        = False
-enableCloudClient       = False
+enableCloudClient       = True
 enableSmtpClient        = False
 enablePersistenceClient = False
 #enableSystemPerformance = False
@@ -100,6 +101,7 @@ enableSystemPerformance = True
 testGdaDataPath         = /tmp/gda-data
 testCdaDataPath         = /tmp/cda-data
 testEmptyApp            = False
+enableRunForever       = True
 
 # if true, GDA will process humidity change events from CDA
 handleHumidityChangeOnDevice = True
