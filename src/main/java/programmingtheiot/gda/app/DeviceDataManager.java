@@ -131,8 +131,14 @@ public class DeviceDataManager implements IDataMessageListener
 				_Logger.warning("Error flag set for ActuatorData instance.");
 			}
 			
-			if (this.redisClient.connectClient()) {
-			    this.redisClient.storeData(resourceName.getDeviceName(), 0, data);
+			// Store to Redis if client is available and connected
+			if (this.redisClient != null && this.redisClient.isClientConnected()) {
+			    boolean stored = this.redisClient.storeData(resourceName.getDeviceName(), 0, data);
+			    if (!stored) {
+			    	_Logger.warning("Failed to store ActuatorData to Redis.");
+			    }
+			} else {
+				_Logger.info("Redis client not connected. Skipping persistence.");
 			}
 			
 			return true;

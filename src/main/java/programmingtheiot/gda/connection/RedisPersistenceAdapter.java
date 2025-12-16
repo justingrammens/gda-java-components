@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +44,7 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	// private var's
 	private String host = null;
     private int port = 0;
+    private String password = null;
     private Jedis redisClient = null;
     private boolean isConnected = false;
 	
@@ -77,11 +79,44 @@ public class RedisPersistenceAdapter implements IPersistenceClient
         }
         try {
             this.redisClient = new Jedis(this.host, this.port);
-            this.isConnected = true;
-            _Logger.info("Connected to Redis at " + host + ":" + port);
+            
+            // Authenticate if password is provided
+            if (this.password != null && !this.password.isEmpty()) {
+                _Logger.info("Authenticating to Redis with password...");
+                this.redisClient.auth(this.password);
+            }
+            
+            // Test the connection with a PING
+            String response = this.redisClient.ping();
+            if ("PONG".equals(response)) {
+                this.isConnected = true;
+                _Logger.info("Connected to Redis at " + host + ":" + port);
+            } else {
+                this.isConnected = false;
+                _Logger.severe("Redis connection test failed");
+            }
+        } catch (JedisConnectionException e) {
+            _Logger.severe("Failed to connect to Redis at " + host + ":" + port + ". Is Redis running? " + e.getMessage());
+            this.isConnected = false;
+            if (this.redisClient != null) {
+                try {
+                    this.redisClient.close();
+                } catch (Exception ex) {
+                    // Ignore close errors
+                }
+                this.redisClient = null;
+            }
         } catch (Exception e) {
             _Logger.severe("Failed to connect to Redis: " + e.getMessage());
             this.isConnected = false;
+            if (this.redisClient != null) {
+                try {
+                    this.redisClient.close();
+                } catch (Exception ex) {
+                    // Ignore close errors
+                }
+                this.redisClient = null;
+            }
         }
         return this.isConnected;
 	}
@@ -143,13 +178,25 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	@Override
 	public boolean storeData(String topic, int qos, ActuatorData... data)
 	{
-		if (!isClientConnected() || data == null) return false;
-	    	var du = DataUtil.getInstance();
-	    	for (ActuatorData d : data) {
-	    		String json = du.actuatorDataToJson(d);   // <-- not d.toString()
-	    		this.redisClient.rpush(topic, json);
-	    	}
-	    return true;
+		if (!isClientConnected() || data == null) {
+			_Logger.warning("Cannot store ActuatorData - Redis client not connected or data is null");
+			return false;
+		}
+		try {
+			var du = DataUtil.getInstance();
+			for (ActuatorData d : data) {
+				String json = du.actuatorDataToJson(d);
+				this.redisClient.rpush(topic, json);
+			}
+			return true;
+		} catch (JedisConnectionException e) {
+			_Logger.severe("Lost connection to Redis while storing ActuatorData: " + e.getMessage());
+			this.isConnected = false;
+			return false;
+		} catch (Exception e) {
+			_Logger.severe("Error storing ActuatorData to Redis: " + e.getMessage());
+			return false;
+		}
 	}
 
 	/**
@@ -158,13 +205,25 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	@Override
 	public boolean storeData(String topic, int qos, SensorData... data)
 	{
-		if (!isClientConnected() || data == null) return false;
-    	var du = DataUtil.getInstance();
-    	for (SensorData d : data) {
-    		String json = du.sensorDataToJson(d);  
-    		this.redisClient.rpush(topic, json);
-    	}
-    	return true;
+		if (!isClientConnected() || data == null) {
+			_Logger.warning("Cannot store SensorData - Redis client not connected or data is null");
+			return false;
+		}
+		try {
+			var du = DataUtil.getInstance();
+			for (SensorData d : data) {
+				String json = du.sensorDataToJson(d);
+				this.redisClient.rpush(topic, json);
+			}
+			return true;
+		} catch (JedisConnectionException e) {
+			_Logger.severe("Lost connection to Redis while storing SensorData: " + e.getMessage());
+			this.isConnected = false;
+			return false;
+		} catch (Exception e) {
+			_Logger.severe("Error storing SensorData to Redis: " + e.getMessage());
+			return false;
+		}
 	}
 
 	/**
@@ -173,13 +232,25 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 	@Override
 	public boolean storeData(String topic, int qos, SystemPerformanceData... data)
 	{
-		if (!isClientConnected() || data == null) return false;
-    	var du = DataUtil.getInstance();
-    	for (SystemPerformanceData d : data) {
-    		String json = du.systemPerformanceDataToJson(d);  
-    		this.redisClient.rpush(topic, json);
-    	}
-    	return true;
+		if (!isClientConnected() || data == null) {
+			_Logger.warning("Cannot store SystemPerformanceData - Redis client not connected or data is null");
+			return false;
+		}
+		try {
+			var du = DataUtil.getInstance();
+			for (SystemPerformanceData d : data) {
+				String json = du.systemPerformanceDataToJson(d);
+				this.redisClient.rpush(topic, json);
+			}
+			return true;
+		} catch (JedisConnectionException e) {
+			_Logger.severe("Lost connection to Redis while storing SystemPerformanceData: " + e.getMessage());
+			this.isConnected = false;
+			return false;
+		} catch (Exception e) {
+			_Logger.severe("Error storing SystemPerformanceData to Redis: " + e.getMessage());
+			return false;
+		}
 	}
 	
 	// private methods
@@ -192,7 +263,25 @@ public class RedisPersistenceAdapter implements IPersistenceClient
 		ConfigUtil config = ConfigUtil.getInstance();
     	this.host = config.getProperty(ConfigConst.DATA_GATEWAY_SERVICE, ConfigConst.HOST_KEY, "localhost");
     	this.port = config.getInteger(ConfigConst.DATA_GATEWAY_SERVICE, ConfigConst.PORT_KEY, 6379);
-
+    	
+    	// Load password from credentials file if available
+    	try {
+    		Properties credProps = config.getCredentials(ConfigConst.DATA_GATEWAY_SERVICE);
+    		if (credProps != null) {
+    			this.password = credProps.getProperty(ConfigConst.USER_AUTH_TOKEN_KEY);
+    			if (this.password != null && !this.password.isEmpty()) {
+    				_Logger.info("Redis authentication token loaded from credentials file.");
+    			} else {
+    				_Logger.warning("Credentials file found but '" + ConfigConst.USER_AUTH_TOKEN_KEY + "' key is missing or empty.");
+    				_Logger.info("Available keys in credentials: " + credProps.keySet());
+    			}
+    		} else {
+    			_Logger.warning("No credentials returned for section: " + ConfigConst.DATA_GATEWAY_SERVICE);
+    		}
+    	} catch (Exception e) {
+    		_Logger.log(Level.WARNING, "Error loading Redis credentials: " + e.getMessage(), e);
+    		this.password = null;
+    	}
 	}
 	
 
